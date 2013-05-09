@@ -10,16 +10,20 @@ ARG = process.argv[2..]
 RE = RegExp ARG[0]
 
 file1 = (fn, cb) ->
-  # :todo: how do we read a file line by line?
-  fs.readFile fn, (err, buf) ->
-    if err
-      console.warn err
-      cb()
-    s = String(buf)
-    lines = s.split('\n')
-    for l in lines
-      if RE.test l
-        console.log l
+  buf = ''
+  inp = fs.createReadStream fn
+  inp.on 'data', (data) ->
+    buf += data
+    if '\n' in buf
+      lines = buf.split '\n'
+    buf = lines.pop()
+    for line in lines
+      if RE.test line
+        console.log line
+  inp.on 'end', () ->
+    if buf
+      if RE.test buf
+        console.log buf
     cb()
 
 async.each ARG[1..], file1, () ->
