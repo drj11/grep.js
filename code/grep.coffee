@@ -33,6 +33,9 @@ stream1 = (inp, cb) ->
       if argv.c
         c += 1
         return
+      if many
+        process.stdout.write inp.path
+        process.stdout.write ':'
       if argv.n
         process.stdout.write String(n)
         process.stdout.write ':'
@@ -53,6 +56,10 @@ stream1 = (inp, cb) ->
     cb()
 
 if ARG.length > 1
+  if ARG.length > 2
+    many = true
+  else
+    many = false
   async.each ARG[1..], file1, () ->
     process.exit rc
 else

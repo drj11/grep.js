@@ -1,0 +1,15 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+res=$($GREP foam test/rc)
+case $res in
+  (foam) ;;
+  (*) exit 9 ;;
+esac
+res=$($GREP foam test/rc test/rc)
+case $res in
+  ('test/rc:foam
+test/rc:foam') ;;
+  (*) exit 8 ;;
+esac
+printf '%s\n' "$0 passed"
+exit 0
