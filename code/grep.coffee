@@ -19,9 +19,13 @@ RE = RegExp ARG[0], flags
 file1 = (fn, cb) ->
   buf = ''
   n = 0 # line number
+  c = 0 # count of matches
   line1 = (line) ->
     n += 1
     if RE.test line
+      if argv.c
+        c += 1
+        return
       if argv.n
         process.stdout.write String(n)
         process.stdout.write ':'
@@ -38,6 +42,8 @@ file1 = (fn, cb) ->
   inp.on 'end', () ->
     if buf
       line1 line
+    if argv.c
+      console.log String(c)
     cb()
 
 async.each ARG[1..], file1, () ->
