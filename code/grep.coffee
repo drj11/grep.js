@@ -14,7 +14,13 @@ ARG = argv._
 flags = ''
 if argv.i
   flags += 'i'
-RE = RegExp ARG[0], flags
+re = ARG[0]
+if argv.x
+  if not /^\^/.test re
+    re = '^' + re
+  if not /\$$/.test re
+    re = re + '$'
+RE = RegExp re, flags
 
 rc = 1 # no lines selected
 

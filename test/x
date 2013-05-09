@@ -1,0 +1,14 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+res=$($GREP -x foam test/rc)
+case $res in
+  (foam) ;;
+  (*) exit 9 ;;
+esac
+res=$($GREP -x oam < test/rc)
+case $res in
+  ('') ;;
+  (*) exit 8 ;;
+esac
+printf '%s\n' "$0 passed"
+exit 0
