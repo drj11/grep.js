@@ -1,0 +1,14 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+$GREP [- test/rc 2> /dev/null
+case $? in
+  (0|1) exit 9 ;;
+  (*) ;;
+esac
+res=$($GREP [- 2>&1 1> /dev/null)
+case $res in
+  ('') exit 8 ;;
+  (*) ;;
+esac
+printf '%s\n' "$0 passed"
+exit 0

@@ -20,7 +20,11 @@ if argv.x
     re = '^' + re
   if not /\$$/.test re
     re = re + '$'
-RE = RegExp re, flags
+try
+  RE = RegExp re, flags
+catch err
+  console.warn String(err)
+  process.exit 5
 
 # Result Code
 #  0: at least one line selected
