@@ -30,6 +30,12 @@ stream1 = (inp, cb) ->
     n += 1
     if RE.test line
       rc = 0
+      if argv.l
+        if inp.fd == 0
+          console.log '(standard input)'
+        else
+          console.log inp.path
+        return cb()
       if argv.c
         c += 1
         return

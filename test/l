@@ -1,0 +1,14 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+res=$(env - $GREP -l foam test/rc)
+case $res in
+  (test/rc) ;;
+  (*) exit 9 ;;
+esac
+res=$(env - $GREP -l foam < test/rc)
+case $res in
+  ('(standard input)') ;;
+  (*) exit 8 ;;
+esac
+printf '%s\n' "$0 passed"
+exit 0
