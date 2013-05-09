@@ -22,10 +22,20 @@ if argv.x
     re = re + '$'
 RE = RegExp re, flags
 
-rc = 1 # no lines selected
+# Result Code
+#  0: at least one line selected
+#  1: no lines selected
+#  >1: error
+# In fact we use bit 0 to track the lines selected, and bit 1
+# to track errors.
+rc = 1
 
 file1 = (fn, cb) ->
   inp = fs.createReadStream fn
+  inp.on 'error', (err) ->
+    unless argv.s
+      console.warn String(err)
+      rc |= 2
   stream1 inp, cb
 
 stream1 = (inp, cb) ->
@@ -35,7 +45,7 @@ stream1 = (inp, cb) ->
   line1 = (line) ->
     n += 1
     if RE.test(line) != argv.v
-      rc = 0
+      rc &= ~1
       if argv.q
         return cb 'early'
       if argv.l
