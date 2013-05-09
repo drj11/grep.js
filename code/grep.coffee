@@ -36,6 +36,8 @@ stream1 = (inp, cb) ->
     n += 1
     if RE.test(line) != argv.v
       rc = 0
+      if argv.q
+        return cb 'early'
       if argv.l
         if inp.fd == 0
           console.log '(standard input)'

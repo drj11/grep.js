@@ -1,0 +1,19 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+res=$($GREP -q foo << EOF
+moofoo
+EOF
+)
+case $res in
+  ('') ;;
+  (*) exit 9 ;;
+esac
+$GREP -q foo << EOF
+foam
+EOF
+if [ $? != 1 ]
+then
+  exit 8
+fi
+printf '%s\n' "$0 passed"
+exit 0
