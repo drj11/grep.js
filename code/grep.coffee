@@ -4,10 +4,17 @@ fs = require 'fs'
 
 # https://github.com/caolan/async
 async = require 'async'
+# https://github.com/substack/node-optimist
+optimist = require 'optimist'
 
-# process.argv[0] is coffee, [1] is the name of this script.
-ARG = process.argv[2..]
-RE = RegExp ARG[0]
+argv = optimist.boolean('clqinsvx'.split '').argv
+
+ARG = argv._
+
+flags = ''
+if argv.i
+  flags += 'i'
+RE = RegExp ARG[0], flags
 
 file1 = (fn, cb) ->
   buf = ''
