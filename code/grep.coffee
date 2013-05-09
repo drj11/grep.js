@@ -16,13 +16,20 @@ if argv.i
   flags += 'i'
 RE = RegExp ARG[0], flags
 
+rc = 1 # no lines selected
+
 file1 = (fn, cb) ->
+  inp = fs.createReadStream fn
+  stream1 inp, cb
+
+stream1 = (inp, cb) ->
   buf = ''
   n = 0 # line number
   c = 0 # count of matches
   line1 = (line) ->
     n += 1
     if RE.test line
+      rc = 0
       if argv.c
         c += 1
         return
@@ -31,7 +38,6 @@ file1 = (fn, cb) ->
         process.stdout.write ':'
       console.log line
 
-  inp = fs.createReadStream fn
   inp.on 'data', (data) ->
     buf += data
     if '\n' in buf
@@ -46,5 +52,10 @@ file1 = (fn, cb) ->
       console.log String(c)
     cb()
 
-async.each ARG[1..], file1, () ->
-  process.exit()
+if ARG.length > 1
+  async.each ARG[1..], file1, () ->
+    process.exit rc
+else
+  process.stdin.resume()
+  async.each [process.stdin], stream1, () ->
+    process.exit rc
