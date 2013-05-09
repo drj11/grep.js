@@ -28,7 +28,7 @@ stream1 = (inp, cb) ->
   c = 0 # count of matches
   line1 = (line) ->
     n += 1
-    if RE.test line
+    if RE.test(line) != argv.v
       rc = 0
       if argv.l
         if inp.fd == 0

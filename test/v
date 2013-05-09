@@ -1,0 +1,10 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+res=$(env - $GREP -v foam test/rc)
+case $res in
+  (*foam*) exit 9 ;;
+  (*foo*) ;;
+  (*) exit 9 ;;
+esac
+printf '%s\n' "$0 passed"
+exit 0
