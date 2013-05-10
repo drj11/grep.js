@@ -4,3 +4,7 @@ Unix grep for node.js
 
 Intended to be (but not yet) POSIX compliant.
 
+# Tests
+
+    npm test
+
