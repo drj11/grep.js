@@ -4,7 +4,7 @@
   "description": "Unix grep written for node.js",
   "main": "code/grep.js",
   "scripts": {
-    "test": "test/all",
+    "test": "GREP=code/grep.coffee test/all",
     "prepublish": "coffee -c code"
   },
   "repository": "",
