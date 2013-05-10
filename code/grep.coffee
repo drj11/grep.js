@@ -14,17 +14,43 @@ ARG = argv._
 flags = ''
 if argv.i
   flags += 'i'
-re = ARG[0]
-if argv.x
-  if not /^\^/.test re
-    re = '^' + re
-  if not /\$$/.test re
-    re = re + '$'
-try
-  RE = RegExp re, flags
-catch err
-  console.warn String(err)
-  process.exit 5
+
+# Where the file arguments start, as an index
+# into the ARG array.
+argind = 0
+
+# Process pattern options.
+
+relist = []
+patternl = (patterns) ->
+  for pattern in patterns.split '\n'
+    pattern1 pattern
+pattern1 = (pattern) ->
+  re = pattern
+  if argv.x
+    if not /^\^/.test re
+      re = '^' + re
+    if not /\$$/.test re
+      re = re + '$'
+  try
+    RegExp re
+  catch err
+    console.warn String(err)
+    process.exit 5
+  relist.push re
+
+if argv.e
+  if typeof argv.e is 'string'
+    argv.e = [ argv.e ]
+  # Each -e option is a list of patterns separated by newline.
+  for patterns in argv.e
+    patternl patterns
+else
+  argind = 1
+  patternl ARG[0]
+
+# Turn the list of regular expressions into one super RE.
+RE = RegExp "(#{relist.join ')|('})", flags
 
 # Result Code
 #  0: at least one line selected
@@ -83,12 +109,13 @@ stream1 = (inp, cb) ->
       console.log String(c)
     cb()
 
-if ARG.length > 1
-  if ARG.length > 2
+ARG = ARG[argind..]
+if ARG.length > 0
+  if ARG.length > 1
     many = true
   else
     many = false
-  async.each ARG[1..], file1, () ->
+  async.each ARG, file1, () ->
     process.exit rc
 else
   process.stdin.resume()

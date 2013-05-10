@@ -1,0 +1,20 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+$GREP -e foo test/rc > /dev/null
+case $? in
+  (0) ;;
+  (*) exit 9 ;;
+esac
+res=$($GREP -e pqr -e oam test/rc)
+case $res in
+  (foam) ;;
+  (*) exit 8 ;;
+esac
+res=$($GREP -c '<<
+oam' test/rc)
+case $res in
+  (3) ;;
+  (*) exit 7 ;;
+esac
+printf '%s\n' "$0 passed"
+exit 0
