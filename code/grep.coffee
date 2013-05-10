@@ -66,6 +66,7 @@ file1 = (fn, cb) ->
     unless argv.s
       console.warn String(err)
       rc |= 2
+      cb()
   stream1 inp, cb
 
 stream1 = (inp, cb) ->
