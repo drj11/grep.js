@@ -1,0 +1,10 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+# Targets appear with line numbers
+res=$($GREP -n ^EOF test/rc)
+case $res in
+  (5:*12:*) ;;
+  (*) exit 9 ;;
+esac
+printf '%s\n' "$0 passed"
+exit 0
