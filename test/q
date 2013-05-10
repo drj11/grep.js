@@ -15,5 +15,17 @@ if [ $? != 1 ]
 then
   exit 8
 fi
+# -q suppresses file open errors when pattern is matched.
+$GREP -q foo /etc/foo test/rc 2> /dev/null
+if [ $? != 0 ]
+then
+  exit 7
+fi
+# -q suppresses file open errors only when pattern is matched.
+$GREP -q foo /etc/foo 2> /dev/null
+if [ $? -lt 2 ]
+then
+  exit 6
+fi
 printf '%s\n' "$0 passed"
 exit 0

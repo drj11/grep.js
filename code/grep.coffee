@@ -116,7 +116,9 @@ if ARG.length > 0
     many = true
   else
     many = false
-  async.each ARG, file1, () ->
+  async.each ARG, file1, (err) ->
+    if err is 'early'
+      process.exit 0
     process.exit rc
 else
   process.stdin.resume()
