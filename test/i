@@ -1,0 +1,16 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+# Upper case pattern can find lower case target.
+$GREP -i Foo test/rc > /dev/null
+case $? in
+  (0) ;;
+  (*) exit 9 ;;
+esac
+# Lower case pattern can find upper case target.
+$GREP -i eof test/rc > /dev/null
+case $? in
+  (0) ;;
+  (*) exit 8 ;;
+esac
+printf '%s\n' "$0 passed"
+exit 0
