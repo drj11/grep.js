@@ -45,7 +45,14 @@ if argv.e
   # Each -e option is a list of patterns separated by newline.
   for patterns in argv.e
     patternl patterns
-else
+if argv.f
+  if typeof argv.f is 'string'
+    argv.f = [ argv.f ]
+  for fn in argv.f
+    s = String(fs.readFileSync fn)
+    s = s.replace /\n$/, ''
+    patternl s
+if not argv.e and not argv.f
   argind = 1
   patternl ARG[0]
 

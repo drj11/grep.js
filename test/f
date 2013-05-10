@@ -1,0 +1,9 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+res=$($GREP -f test/rc test/all < /dev/null)
+case $res in
+  ('#!/bin/sh') ;;
+  (*) exit 9 ;;
+esac
+printf '%s\n' "$0 passed"
+exit 0
