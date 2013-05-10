@@ -1,0 +1,16 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+# No message on stderr.
+res=$($GREP -s foo /etc/foo 2>&1)
+case $res in
+  ('') ;;
+  (*) exit 9 ;;
+esac
+# Get error message for bad RegExp.
+res=$($GREP -s [a test/rc 2>&1 1> /dev/null)
+case $res in
+  ('') exit 8 ;;
+  (*) ;;
+esac
+printf '%s\n' "$0 passed"
+exit 0
