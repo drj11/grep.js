@@ -1,0 +1,22 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+# The correct count appears on stdout.
+res=$($GREP -c foo test/rc)
+case $res in
+  (3) ;;
+  (*) exit 9 ;;
+esac
+# Exit Status 1 when no lines selected.
+$GREP -c pqr test/rc > /dev/null
+case $? in
+  (1) ;;
+  (*) exit 8 ;;
+esac
+# Exit Status 0 when lines selected.
+$GREP -c oam test/rc > /dev/null
+case $? in
+  (0) ;;
+  (*) exit 7 ;;
+esac
+printf '%s\n' "$0 passed"
+exit 0
