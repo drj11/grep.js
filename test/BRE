@@ -1,10 +1,24 @@
 #!/bin/sh
 GREP=${GREP:-grep}
+# Many of these test expressions would be interpreted differently
+# if treated as EREs not BREs.
 # Has no stderr for valid BRE.
 res=$($GREP '(' test/all 2>&1 1> /dev/null)
 case $res in
   ('') ;;
   (*) exit 9 ;;
+esac
+# Does not find match.
+$GREP ={1} test/rc > /dev/null
+case $? in
+  (1) ;;
+  (*) exit 8 ;;
+esac
+# Finds exactly one match.
+res=$($GREP -c '|' test/all)
+case $res in
+  (1) ;;
+  (*) exit 7;;
 esac
 printf '%s\n' "$0 passed"
 exit 0
