@@ -1,0 +1,30 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+# Many of these test expressions would be interpreted differently
+# if treated as BREs not EREs.
+# Matches some lines.
+$GREP -E '(.)' test/rc 1> /dev/null 2>&1
+case $? in
+  (0) ;;
+  (*) exit 9 ;;
+esac
+# Also matches some lines.
+$GREP -E '<<|pqr' test/rc > /dev/null 2>&1
+case $? in
+  (0) ;;
+  (*) exit 8 ;;
+esac
+# Again matches some lines.
+$GREP -E 'o{2}' test/rc > /dev/null 2>&1
+case $? in
+  (0) ;;
+  (*) exit 7;;
+esac
+# Matches ? optionally.
+$GREP -E 'foaz?' test/rc > /dev/null 2>&1
+case $? in
+  (0) ;;
+  (*) exit 6;;
+esac
+printf '%s\n' "$0 passed"
+exit 0

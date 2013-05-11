@@ -7,7 +7,7 @@ async = require 'async'
 # https://github.com/substack/node-optimist
 optimist = require 'optimist'
 
-argv = optimist.boolean('clqinsvx'.split '').argv
+argv = optimist.boolean('EFclqinsvx'.split '').argv
 
 ARG = argv._
 
