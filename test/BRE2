@@ -14,5 +14,11 @@ case $res in
   (1) ;;
   (*) exit 8;;
 esac
+# Matches ].
+$GREP '[]]' test/rc > /dev/null
+case $? in
+  (0) ;;
+  (*) exit 7 ;;
+esac
 printf '%s\n' "$0 passed"
 exit 0
