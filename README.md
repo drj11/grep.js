@@ -2,11 +2,14 @@
 
 Unix grep for node.js
 
-Intended to be (but not yet) POSIX compliant.
+POSIX compliant.
 
-The following options are implemented:
+The following POSIX options are implemented:
 
-    Eefclqinsvx
+    EFefclqinsvx
+
+Any remaining deviations from the POSIX spec are bugs, and you should
+[report them](https://github.com/drj11/grep.js/issues).
 
 # Tests
 
