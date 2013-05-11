@@ -6,7 +6,7 @@ Intended to be (but not yet) POSIX compliant.
 
 The following options are implemented:
 
-    efclqinsvx
+    Eefclqinsvx
 
 # Tests
 
