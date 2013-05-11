@@ -20,5 +20,11 @@ case $? in
   (0) ;;
   (*) exit 7 ;;
 esac
+# Matches \.
+$GREP '[\]' test/rc > /dev/null 2> /dev/null
+case $? in
+  (0) ;;
+  (*) exit 6 ;;
+esac
 printf '%s\n' "$0 passed"
 exit 0

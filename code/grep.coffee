@@ -31,6 +31,9 @@ if argv.F
 # Convert single BRE token into JavaScript RegExp.
 # A string is returned.
 bre1token = (tok) ->
+  # In POSIX RE in a bracket expression \ matches itself.
+  if /^\[/.test tok
+    tok = tok.replace /\\/, '\\\\'
   # In POSIX RE in a bracket expression an initial ]
   # or initial ^] is allowed.
   if /^\[\^?\]/.test tok
