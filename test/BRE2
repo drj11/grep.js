@@ -1,0 +1,18 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+# Many of these test expressions would be interpreted differently
+# if treated as EREs not BREs.
+# Has no stderr for valid BRE.
+res=$($GREP -c '\(..t\)\{2\}' test/all)
+case $res in
+  (3) ;;
+  (*) exit 9 ;;
+esac
+# Back-references work.
+res=$($GREP -c '\([a-z]\).\1' test/rc)
+case $res in
+  (1) ;;
+  (*) exit 8;;
+esac
+printf '%s\n' "$0 passed"
+exit 0

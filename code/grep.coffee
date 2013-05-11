@@ -53,6 +53,7 @@ transmogrify = (pattern) ->
 
 # Process pattern options.
 
+# List of patterns to match (each element is a RegExp object).
 relist = []
 patternl = (patterns) ->
   for pattern in patterns.split '\n'
@@ -65,7 +66,7 @@ pattern1 = (pattern) ->
     if not /\$$/.test re
       re = re + '$'
   try
-    RegExp re
+    re = RegExp re, flags
   catch err
     console.warn String(err)
     process.exit 5
@@ -88,9 +89,6 @@ if not argv.e and not argv.f
   argind = 1
   patternl ARG[0]
 
-# Turn the list of regular expressions into one super RE.
-RE = RegExp "(#{relist.join ')|('})", flags
-
 # Result Code
 #  0: at least one line selected
 #  1: no lines selected
@@ -108,13 +106,23 @@ file1 = (fn, cb) ->
       cb()
   stream1 inp, cb
 
+# Return True if and only if the line is selected.
+select = (line) ->
+  # Test each RE one at a time. We can't optimise by making one
+  # big RE because back-references won't work (at least, we can't
+  # do that in the general case).
+  for RE in relist
+    if RE.test(line) != argv.v
+      return true
+  return false
+
 stream1 = (inp, cb) ->
   buf = ''
   n = 0 # line number
   c = 0 # count of matches
   line1 = (line) ->
     n += 1
-    if RE.test(line) != argv.v
+    if select line
       rc &= ~1
       if argv.q
         return cb 'early'
