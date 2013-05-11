@@ -20,5 +20,11 @@ case $res in
   (1) ;;
   (*) exit 7;;
 esac
+# Matches ? literally.
+res=$($GREP -c '.?' test/rc)
+case $res in
+  (2) ;;
+  (*) exit 6;;
+esac
 printf '%s\n' "$0 passed"
 exit 0
