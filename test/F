@@ -1,0 +1,12 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+# Many of these test expressions would be interpreted differently
+# if treated as BREs or EREs.
+# Matches exactly one line.
+res=$($GREP -c -F '(*' test/all)
+case $res in
+  (1) ;;
+  (*) exit 9 ;;
+esac
+printf '%s\n' "$0 passed"
+exit 0

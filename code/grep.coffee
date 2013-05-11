@@ -50,6 +50,8 @@ transmogrify = (pattern) ->
       | \\.             # Backslash something
       | .               # Everything else
       ///g, bre1token
+  if flavour is 'fixie'
+    return pattern.replace /[\[\]^$()|{}\\.*+?]/g, (x) -> '\\' + x
 
 # Process pattern options.
 
