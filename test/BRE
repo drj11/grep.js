@@ -1,0 +1,10 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+# Has no stderr for valid BRE.
+res=$($GREP '(' test/all 2>&1 1> /dev/null)
+case $res in
+  ('') ;;
+  (*) exit 9 ;;
+esac
+printf '%s\n' "$0 passed"
+exit 0

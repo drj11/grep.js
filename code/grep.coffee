@@ -19,6 +19,38 @@ if argv.i
 # into the ARG array.
 argind = 0
 
+flavour = 'bre'
+if argv.E
+  flavour = 'ere'
+if argv.F
+  if argv.E
+    console.warn "Cannot specify both -E and -F"
+    process.exit 9
+  flavour = 'fixie'
+
+# Convert single BRE token into JavaScript RegExp.
+# A string is returned.
+bre1token = (tok) ->
+  # Tokens for which we have to remove a leading backslash.
+  if /^\\[(){}]$/.test tok
+    return tok[1]
+  # Tokens for which we have to add a leading backslash.
+  if /^[+?|(){}]$/.test tok
+    return '\\' + tok
+  # Everything else is unchanged.
+  return tok
+
+# Converts BRE or fixies into JavaScript RegExp.
+transmogrify = (pattern) ->
+  if flavour is 'ere'
+    return pattern
+  if flavour is 'bre'
+    return pattern.replace ///
+        \[\^?\]?[^]]*\] # Bracket Expression
+      | \\.             # Backslash something
+      | .               # Everything else
+      ///g, bre1token
+
 # Process pattern options.
 
 relist = []
@@ -26,7 +58,7 @@ patternl = (patterns) ->
   for pattern in patterns.split '\n'
     pattern1 pattern
 pattern1 = (pattern) ->
-  re = pattern
+  re = transmogrify pattern
   if argv.x
     if not /^\^/.test re
       re = '^' + re
