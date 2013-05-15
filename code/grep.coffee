@@ -163,6 +163,8 @@ stream1 = (inp, cb) ->
     if buf
       line1 line
     if argv.c
+      if many
+        process.stdout.write(inp.path+':')
       console.log String(c)
     cb()
 

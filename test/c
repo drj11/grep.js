@@ -18,5 +18,12 @@ case $? in
   (0) ;;
   (*) exit 7 ;;
 esac
+# File name appears with multiple args.
+res=$($GREP -c pqr test/rc test/rc)
+case $res in
+  ('test/rc:0
+test/rc:0') ;;
+  (*) exit 6 ;;
+esac
 printf '%s\n' "$0 passed"
 exit 0
