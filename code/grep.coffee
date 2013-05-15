@@ -145,11 +145,9 @@ stream1 = (inp, cb) ->
         c += 1
         return
       if many
-        process.stdout.write inp.path
-        process.stdout.write ':'
+        process.stdout.write(inp.path+':')
       if argv.n
-        process.stdout.write String(n)
-        process.stdout.write ':'
+        process.stdout.write(String(n)+':')
       console.log line
 
   inp.on 'data', (data) ->
