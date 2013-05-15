@@ -154,9 +154,9 @@ stream1 = (inp, cb) ->
     buf += data
     if '\n' in buf
       lines = buf.split '\n'
-    buf = lines.pop()
-    for line in lines
-      line1 line
+      buf = lines.pop()
+      for line in lines
+        line1 line
   inp.on 'end', () ->
     if buf
       line1 line

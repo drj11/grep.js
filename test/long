@@ -1,0 +1,10 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+# Moderately long lines
+res=$(echo $(yes foo | sed 5000q) | $GREP bar 2>&1)
+case $res in
+  ('') ;;
+  (*) exit 9;;
+esac
+printf '%s\n' "$0 passed"
+exit 0
