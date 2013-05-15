@@ -1,0 +1,14 @@
+#!/bin/sh
+GREP=${GREP:-grep}
+# Test when final line has no newline terminator.
+res=$(printf 'foo\nbar' | $GREP bar 2>&-)
+if [ $? != 0 ]
+then
+  exit 9
+fi
+case $res in
+  (bar) ;;
+  (*) exit 8 ;;
+esac
+printf '%s\n' "$0 passed"
+exit 0

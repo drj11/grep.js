@@ -159,7 +159,11 @@ stream1 = (inp, cb) ->
         line1 line
   inp.on 'end', () ->
     if buf
-      line1 line
+      # Last line has no terminating newline.
+      # Technically that means the input is a not a
+      # POSIX test file. So I can do anything.
+      process.stderr.write '\a'
+      line1 buf
     if argv.c
       if many
         process.stdout.write(inp.path+':')
