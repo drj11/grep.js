@@ -28,35 +28,38 @@ if argv.F
     process.exit 9
   flavour = 'fixie'
 
-# Convert single BRE token into JavaScript RegExp.
-# A string is returned.
-bre1token = (tok) ->
-  # In POSIX RE in a bracket expression \ matches itself.
-  if /^\[/.test tok
-    tok = tok.replace /\\/, '\\\\'
-  # In POSIX RE in a bracket expression an initial ]
-  # or initial ^] is allowed.
-  if /^\[\^?\]/.test tok
-    return tok.replace /]/, '\\]'
-  # Tokens for which we have to remove a leading backslash.
-  if /^\\[(){}]$/.test tok
-    return tok[1]
-  # Tokens for which we have to add a leading backslash.
-  if /^[+?|(){}]$/.test tok
-    return '\\' + tok
-  # Everything else is unchanged.
-  return tok
+BREToRegExp = (pattern) ->
+  # Convert single BRE token into JavaScript RegExp.
+  # A string is returned.
+  bre1token = (tok) ->
+    # In POSIX RE in a bracket expression \ matches itself.
+    if /^\[/.test tok
+      tok = tok.replace /\\/, '\\\\'
+    # In POSIX RE in a bracket expression an initial ]
+    # or initial ^] is allowed.
+    if /^\[\^?\]/.test tok
+      return tok.replace /]/, '\\]'
+    # Tokens for which we have to remove a leading backslash.
+    if /^\\[(){}]$/.test tok
+      return tok[1]
+    # Tokens for which we have to add a leading backslash.
+    if /^[+?|(){}]$/.test tok
+      return '\\' + tok
+    # Everything else is unchanged.
+    return tok
+
+  return pattern.replace ///
+      \[\^?\]?[^]]*\] # Bracket Expression
+    | \\.             # Backslash something
+    | .               # Everything else
+    ///g, bre1token
 
 # Converts BRE or fixies into JavaScript RegExp.
 transmogrify = (pattern) ->
   if flavour is 'ere'
     return pattern
   if flavour is 'bre'
-    return pattern.replace ///
-        \[\^?\]?[^]]*\] # Bracket Expression
-      | \\.             # Backslash something
-      | .               # Everything else
-      ///g, bre1token
+    return BREToRegExp pattern
   if flavour is 'fixie'
     return pattern.replace /[\[\]^$()|{}\\.*+?]/g, (x) -> '\\' + x
 
