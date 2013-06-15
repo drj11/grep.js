@@ -16,6 +16,7 @@
   "gitHead": "a851acc5c40e37eddc368c90442911b38033b56d",
   "dependencies": {
     "async": "~0.2.8",
-    "optimist": "~0.4.0"
+    "optimist": "~0.4.0",
+    "posixbre": "~0.0.0"
   }
 }
