@@ -1,7 +1,12 @@
 #!/bin/sh
 GREP=${GREP:-grep}
 # Moderately long lines
-res=$(echo $(yes foo | sed 5000q) | $GREP bar 2>&1)
+ll="foo "
+for x in 1 2 3 4 5 6 7 8 9 10 11 12
+do
+  ll="$ll$ll"
+done
+res=$(echo $ll | $GREP bar 2>&1)
 case $res in
   ('') ;;
   (*) exit 9;;
